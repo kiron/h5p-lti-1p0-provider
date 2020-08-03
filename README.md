@@ -16,10 +16,19 @@ LTI (Learning Tools Interoperability®) provides a standard mechanism for author
 
 ## Installing / Getting started
 
-Nothing here yet.
-Env Vars
+Create a .env file with the following:
+
+SESSION_SECRET=<<Some secret>>
+PORT=<<A local port, for development>>
+OAUTH_CONSUMER_KEY=<<A consumer key, e.g. kiron-lti-h5p>>
+OAUTH_SECRET=<<A longish secret>>
+REDIS_URL=<<A redis url>>
+DOMAIN=<<A hostname>>
+NODE_ENV=<< e.g. development>>
 
 ### Initial Configuration
+
+Inside your learning tool, you will want to specify the following:
 
 &exercise=
 &language=
@@ -50,6 +59,7 @@ The scores in HPI do not go down
 ## Testing
 
  - Some tests under /tests
+ - Run `yarn test`
 
 ## LTI Consumer Versions
 
