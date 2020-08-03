@@ -1,0 +1,53 @@
+{
+  "name": "h5p-lti-1p0-provider",
+  "version": "1.0.0",
+  "description": "An application for building H5P interactions and serving them over LTI v1.0 / v1.1",
+  "main": "server.js",
+  "scripts": {
+    "start": "node src/server",
+    "download": "yarn download:content-type-cache && yarn download:h5p",
+    "test": "jest",
+    "download:content-type-cache": "node scripts/update-real-content-type-cache.js",
+    "download:h5p": "sh scripts/install.sh"
+  },
+  "engines": {
+    "node": "^14.4.0",
+    "yarn": "1.x"
+  },
+  "author": "Dom Starkey",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
+    "connect-redis": "^4.0.4",
+    "crc": "^3.8.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.1.7-alpha.3",
+    "express-session": "^1.16.2",
+    "fs-extra": "^9.0.1",
+    "h5p-nodejs-library": "^3.0.6",
+    "helmet": "^3.23.3",
+    "https": "^1.0.0",
+    "i18next": "^19.5.1",
+    "i18next-fs-backend": "^1.0.6",
+    "i18next-http-middleware": "^3.0.0",
+    "ims-lti": "^3.0.2",
+    "merge": "^1.2.1",
+    "mimetype": "^0.0.8",
+    "pug": "^2.0.4",
+    "qs": "^6.9.4",
+    "redis": "^3.0.2",
+    "util": "^0.12.3"
+  },
+  "devDependencies": {
+    "jest": "^26.1.0",
+    "supertest": "^4.0.2"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  }
+}

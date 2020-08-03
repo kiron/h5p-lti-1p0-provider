@@ -1,0 +1,48 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+html.h5p-iframe,
+html.h5p-iframe > body {
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  line-height: 1.428571429;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #e9f4f8;
+  color: #3a2a75;
+}
+
+html.h5p-iframe .h5p-content {
+  background-color: #ffffff;
+  padding: 10px 15px 20px;
+}
+
+.h5p-multichoice .h5p-alternative-container {
+  background: #ececec;
+}
+
+.h5p-multichoice
+  .h5p-answer:not([aria-disabled="true"]):hover
+  .h5p-alternative-container {
+  background: #eee;
+}
+
+.h5peditor .ui-dialog .h5p-joubelui-button,
+.h5peditor .h5p-joubelui-button,
+.h5p-joubelui-button {
+  background: #3a2a75;
+}
+
+.h5p-joubelui-button:hover,
+.h5p-joubelui-button:focus {
+  background: #2b1f57;
+}
+
+.h5p-joubelui-button:active {
+  position: relative;
+  background: #3a2a75;
+  -webkit-box-shadow: inset 0 4px 0 #2b1f57;
+  -moz-box-shadow: inset 0 4px 0 #2b1f57;
+  box-shadow: inset 0 4px 0 #2b1f57;
+}

@@ -1,0 +1,5 @@
+{
+  "name": "h5p-lti-1p0-provider",
+  "description": "Node.js LTI v1 and v1.1 provider for H5P Activities",
+  "repository": "https://github.com/kiron/h5p-lti-1p0-provider"
+}
