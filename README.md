@@ -19,12 +19,20 @@ LTI (Learning Tools Interoperability®) provides a standard mechanism for author
 Create a .env file with the following:
 
 SESSION_SECRET=<<Some secret>>
+
 PORT=<<A local port, for development>>
+
 OAUTH_CONSUMER_KEY=<<A consumer key, e.g. kiron-lti-h5p>>
+
 OAUTH_SECRET=<<A longish secret>>
+
 REDIS_URL=<<A redis url>>
+
 DOMAIN=<<A hostname>>
+
 NODE_ENV=<< e.g. development>>
+
+
 
 ### Initial Configuration
 
