@@ -32,6 +32,10 @@ DOMAIN={{A hostname}}
 
 NODE_ENV={{ e.g. development}}
 
+`docker build` and `docker push` will then help create your docker image.
+Make sure you update `docker-compose` to better suit your situation. (e.g. Replace the image!)
+
+You might want to set up a cron job to restart the service each day - It will download the latest H5P Libraries.
 
 
 ### Initial Configuration

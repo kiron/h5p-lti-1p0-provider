@@ -5,18 +5,20 @@ services:
     container_name: h5p-lti-1p0-provider
     working_dir: /home/node/app
     links:
-      - redis-h5p
+      - redis
     ports:
       - "443:443"
     volumes:
       - ./h5p:/home/node/app/h5p
       - ./.well-known:/home/node/app/.well-known
       - /etc/letsencrypt/live/h5p-lti.kiron.ngo/:/etc/letsencrypt/live/h5p-lti.kiron.ngo/
+      - /etc/letsencrypt/archive/:/etc/letsencrypt/archive/
     env_file: ./.env
     environment:
-      "NODE_ENV": "development"
+      "NODE_ENV": "production"
     command: sh -c "yarn && yarn download && yarn start"
 
-  redis-h5p:
+  redis:
     image: "redis:alpine"
-    container_name: redis-h5p
+    container_name: redis
+
