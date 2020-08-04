@@ -52,7 +52,11 @@ exports.launch = async (req, res) => {
         req.session.resource_link_title = req.body.resource_link_title;
         req.session.exercise = req.body.custom_exercise;
         req.session.language = req.body.custom_language || "en";
-        req.session.isTutor = provider.instructor === true;
+        req.session.isTutor =
+          provider.instructor === true ||
+          provider.admin === true ||
+          provider.manager === true ||
+          provider.ta === true;
         req.session.custom_message = req.body.custom_message;
         req.session.custom_consumer = req.body.custom_consumer;
         req.session.has_outcome_service = !!provider.outcome_service;
