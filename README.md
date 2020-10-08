@@ -18,19 +18,15 @@ LTI (Learning Tools Interoperability®) provides a standard mechanism for author
 
 Create a .env file with the following:
 
+```
 SESSION_SECRET={{Some secret}}
-
 PORT={{A local port, for development}}
-
 OAUTH_CONSUMER_KEY={{A consumer key, e.g. kiron-lti-h5p}}
-
 OAUTH_SECRET={{A longish secret}}
-
 REDIS_URL={{A redis url}}
-
 DOMAIN={{A hostname}}
-
 NODE_ENV={{ e.g. development}}
+```
 
 `docker build` and `docker push` will then help create your docker image.
 Make sure you update `docker-compose` to better suit your situation. (e.g. Replace the image!)
@@ -63,6 +59,32 @@ The scores in HPI do not go down
 - [x] Node application for LTI provider of H5P player
 - [x] Node application for H5P Editor
 - [x] Redis node for LTI memory storage
+
+-  **Optional:**
+    - [x] External MongoDB for DB storage 
+
+## Remote DB + S3 file storage
+
+To make use of S3 storage and a mongo database to make the application horizontally 
+scalable and remove all state from a single instance, we can enable saving data in mongoDB and files on AWS S3.
+
+Add the following to your env file and the application will do the rest:
+
+```
+TEMPORARYSTORAGE=s3
+AWS_ACCESS_KEY_ID={{S3 access key}}
+AWS_SECRET_ACCESS_KEY={{S3 access key}}
+AWS_S3_ENDPOINT="https://s3.amazonaws.com"
+AWS_REGION={{ e.g. eu-central-1 }}
+CONTENT_AWS_S3_BUCKET={{your-content-bucket-name}
+CONTENT_MONGO_COLLECTION=h5p
+TEMPORARY_AWS_S3_BUCKET={{your-temporary-file-bucket-name}}
+CONTENTSTORAGE=mongos3
+MONGODB_URL="mongodb://{{host}}:{{port}}"
+MONGODB_DB={{mongodbname}}
+MONGODB_USER={{mongodbuser}}
+MONGODB_PASSWORD={{mongodbpass}}
+```
 
 ## Testing
 
