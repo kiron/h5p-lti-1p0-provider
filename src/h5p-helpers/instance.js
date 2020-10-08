@@ -1,4 +1,5 @@
 const H5P = require("h5p-nodejs-library");
+const dbImplementations = require('h5p-nodejs-library/build/src/implementation/db').default;
 const path = require("path");
 const i18next = require("i18next");
 const i18nextHttpMiddleware = require("i18next-http-middleware");
@@ -15,8 +16,39 @@ const createH5PEditor = async (
     new H5P.fsImplementations.InMemoryStorage(),
     config,
     new H5P.fsImplementations.FileLibraryStorage(localLibraryPath),
-    new H5P.fsImplementations.FileContentStorage(localContentPath),
-    new H5P.fsImplementations.DirectoryTemporaryFileStorage(localTemporaryPath),
+    process.env.CONTENTSTORAGE !== "mongos3"
+      ? new H5P.fsImplementations.FileContentStorage(localContentPath)
+      : new dbImplementations.MongoS3ContentStorage(
+          dbImplementations.initS3({
+            s3ForcePathStyle: true,
+            signatureVersion: "v4",
+          }),
+          (await dbImplementations.initMongo()).collection(
+            process.env.CONTENT_MONGO_COLLECTION
+          ),
+          {
+            s3Bucket: process.env.CONTENT_AWS_S3_BUCKET,
+            maxKeyLength: process.env.AWS_S3_MAX_FILE_LENGTH
+              ? Number.parseInt(process.env.AWS_S3_MAX_FILE_LENGTH, 10)
+              : undefined,
+          }
+        ),
+    process.env.TEMPORARYSTORAGE === "s3"
+      ? new dbImplementations.S3TemporaryFileStorage(
+          dbImplementations.initS3({
+            s3ForcePathStyle: true,
+            signatureVersion: "v4",
+          }),
+          {
+            s3Bucket: process.env.TEMPORARY_AWS_S3_BUCKET,
+            maxKeyLength: process.env.AWS_S3_MAX_FILE_LENGTH
+              ? Number.parseInt(process.env.AWS_S3_MAX_FILE_LENGTH, 10)
+              : undefined,
+          }
+        )
+      : new H5P.fsImplementations.DirectoryTemporaryFileStorage(
+          localTemporaryPath
+        ),
     translationCallback
   );
   return h5pEditor;
@@ -28,7 +60,7 @@ exports.getH5PStuff = async () => {
     .use(i18nextHttpMiddleware.LanguageDetector)
     .init({
       backend: {
-        loadPath: "../assets/translations/{{ns}}/{{lng}}.json"
+        loadPath: "../assets/translations/{{ns}}/{{lng}}.json",
       },
       debug: process.env.DEBUG && process.env.DEBUG.includes("i18n"),
       defaultNS: "server",
@@ -37,10 +69,12 @@ exports.getH5PStuff = async () => {
         "client",
         "copyright-semantics",
         "metadata-semantics",
+        "mongo-s3-content-storage",
+        "s3-temporary-storage",
         "server",
-        "storage-file-implementations"
+        "storage-file-implementations",
       ],
-      preload: ["en", "de"]
+      preload: ["en", "de"],
     });
 
   const h5pConfig = await new H5P.H5PConfig(

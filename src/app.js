@@ -89,6 +89,20 @@ h5pInstance.getH5PStuff().then(({ h5pConfig, h5pEditor }) => {
     router.h5pRoutes(h5pEditor, h5pPlayer, "auto")
   );
 
+  // The LibraryAdministrationExpress routes are REST endpoints that offer library
+  // management functionality.
+  app.use(
+      `${h5pEditor.config.baseUrl}/libraries`,
+      H5P.adapters.LibraryAdministrationExpressRouter(h5pEditor)
+  );
+
+  // The ContentTypeCacheExpress routes are REST endpoints that allow updating
+  // the content type cache manually.
+  app.use(
+      `${h5pEditor.config.baseUrl}/content-type-cache`,
+      H5P.adapters.ContentTypeCacheExpressRouter(h5pEditor.contentTypeCache)
+  );
+
   app.get("/h5p", h5pRender.render(h5pEditor));
 });
 
