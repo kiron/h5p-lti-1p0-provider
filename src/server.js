@@ -1,4 +1,5 @@
 const http = require("http");
+const https = require("https");
 const fs = require("fs");
 const app = require("./app");
 const router = require("./routes");
@@ -50,18 +51,50 @@ app.use((req, res, next) => {
   next();
 });
 
+const runWebserver = (webServer, port) => {
+  const http_timeout = process.env.HTTP_TIMEOUT || 5 * 60 * 1000
+  const http_keepAliveTimeout = process.env.HTTP_KEEPALIVE_TIMEOUT || 5 * 60 * 1000
+  const http_headersTimeout = process.env.HTTP_HEADERS_TIMEOUT || 5 * 61 * 1000
+
+  webServer.setTimeout(http_timeout);
+  webServer.keepAliveTimeout = http_keepAliveTimeout;
+  webServer.headersTimeout = http_headersTimeout;
+  webServer.listen(port, () => {
+    console.log(`HTTP Server running on port ${port}`);
+  });
+}
+
 if (process.env.NODE_ENV === "development") {
   // Start the app
   const port = process.env.PORT || 3003;
   app.listen(port, () => console.log(`App listening on port ${port}!`));
 } else {
-  const port = process.env.PORT || 8080
-  const httpServer = http.createServer(app);
+  const port = process.env.PORT || 443;
 
-  httpServer.setTimeout(5 * 60 * 1000);
-  httpServer.keepAliveTimeout = 5 * 60 * 1000;
-  httpServer.headersTimeout = 5 * 61 * 1000;
-  httpServer.listen(port, () => {
-    console.log(`HTTP Server running on port ${port}`);
-  });
+  if (port !== 443) {
+    // server runs behind a proxy, ssl termination is done by proxy
+    runWebserver(http.createServer(app), port);
+
+  } else {
+    // Certificate
+    const privateKey = fs.readFileSync(
+      `/etc/letsencrypt/live/${process.env.DOMAIN}/privkey.pem`,
+      "utf8"
+    );
+    const certificate = fs.readFileSync(
+      `/etc/letsencrypt/live/${process.env.DOMAIN}/cert.pem`,
+      "utf8"
+    );
+    const ca = fs.readFileSync(
+      `/etc/letsencrypt/live/${process.env.DOMAIN}/chain.pem`,
+      "utf8"
+    );
+    const credentials = {
+      key: privateKey,
+      cert: certificate,
+      ca: ca
+    };
+
+    runWebserver(https.createServer(credentials, app), port);
+  }
 }
