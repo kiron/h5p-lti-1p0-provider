@@ -1,4 +1,4 @@
-const https = require("https");
+const http = require("http");
 const fs = require("fs");
 const app = require("./app");
 const router = require("./routes");
@@ -55,31 +55,13 @@ if (process.env.NODE_ENV === "development") {
   const port = process.env.PORT || 3003;
   app.listen(port, () => console.log(`App listening on port ${port}!`));
 } else {
-  // Certificate
-  const privateKey = fs.readFileSync(
-    `/etc/letsencrypt/live/${process.env.DOMAIN}/privkey.pem`,
-    "utf8"
-  );
-  const certificate = fs.readFileSync(
-    `/etc/letsencrypt/live/${process.env.DOMAIN}/cert.pem`,
-    "utf8"
-  );
-  const ca = fs.readFileSync(
-    `/etc/letsencrypt/live/${process.env.DOMAIN}/chain.pem`,
-    "utf8"
-  );
+  const port = process.env.PORT || 8080
+  const httpServer = http.createServer(app);
 
-  const credentials = {
-    key: privateKey,
-    cert: certificate,
-    ca: ca
-  };
-  const httpsServer = https.createServer(credentials, app);
-
-  httpsServer.setTimeout(5 * 60 * 1000);
-  httpsServer.keepAliveTimeout = 5 * 60 * 1000;
-  httpsServer.headersTimeout = 5 * 61 * 1000;
-  httpsServer.listen(443, () => {
-    console.log("HTTPS Server running on port 443");
+  httpServer.setTimeout(5 * 60 * 1000);
+  httpServer.keepAliveTimeout = 5 * 60 * 1000;
+  httpServer.headersTimeout = 5 * 61 * 1000;
+  httpServer.listen(port, () => {
+    console.log(`HTTP Server running on port ${port}`);
   });
 }
