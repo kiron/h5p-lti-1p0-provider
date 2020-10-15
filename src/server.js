@@ -51,18 +51,6 @@ app.use((req, res, next) => {
   next();
 });
 
-const runWebserver = (webServer, port) => {
-  const http_timeout = process.env.HTTP_TIMEOUT || 5 * 60 * 1000
-  const http_keepAliveTimeout = process.env.HTTP_KEEPALIVE_TIMEOUT || 5 * 60 * 1000
-  const http_headersTimeout = process.env.HTTP_HEADERS_TIMEOUT || 5 * 61 * 1000
-
-  webServer.setTimeout(http_timeout);
-  webServer.keepAliveTimeout = http_keepAliveTimeout;
-  webServer.headersTimeout = http_headersTimeout;
-  webServer.listen(port, () => {
-    console.log(`HTTP Server running on port ${port}`);
-  });
-}
 
 if (process.env.NODE_ENV === "development") {
   // Start the app
@@ -70,11 +58,15 @@ if (process.env.NODE_ENV === "development") {
   app.listen(port, () => console.log(`App listening on port ${port}!`));
 } else {
   const port = process.env.PORT || 443;
+  const http_timeout = process.env.HTTP_TIMEOUT || 5 * 60 * 1000
+  const http_keepAliveTimeout = process.env.HTTP_KEEPALIVE_TIMEOUT || 5 * 60 * 1000
+  const http_headersTimeout = process.env.HTTP_HEADERS_TIMEOUT || 5 * 61 * 1000
+
+  let webServer;
 
   if (port !== 443) {
     // server runs behind a proxy, ssl termination is done by proxy
-    runWebserver(http.createServer(app), port);
-
+    webServer = http.createServer(app);
   } else {
     // Certificate
     const privateKey = fs.readFileSync(
@@ -94,7 +86,13 @@ if (process.env.NODE_ENV === "development") {
       cert: certificate,
       ca: ca
     };
-
-    runWebserver(https.createServer(credentials, app), port);
+    webServer = https.createServer(credentials, app);
   }
+
+  webServer.setTimeout(http_timeout);
+  webServer.keepAliveTimeout = http_keepAliveTimeout;
+  webServer.headersTimeout = http_headersTimeout;
+  webServer.listen(port, () => {
+    console.log(`HTTP Server running on port ${port}`);
+  });
 }
