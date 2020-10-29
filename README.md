@@ -68,6 +68,13 @@ The scores in HPI do not go down
 To make use of S3 storage and a mongo database to make the application horizontally 
 scalable and remove all state from a single instance, we can enable saving data in mongoDB and files on AWS S3.
 
+For the mongo DB host, make sure that:
+
+* You specify the host like this: "mongodb://{{host}}:{{port}}"
+* If you are connecting to a localhost mongo db instance, make sure that service is exposed to docker - it is not sufficient to have localhost as the port. See more [here](https://docs.docker.com/docker-for-mac/networking/#use-cases-and-workarounds) 
+
+You can get access to a free test MongoDB cluster [here](https://mongodb.com) to test.
+
 Add the following to your env file and the application will do the rest:
 
 ```
