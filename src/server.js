@@ -8,6 +8,8 @@ const matchesDisallowedStudentPaths = path => {
   return (
     path.match("/h5p/edit/.*") ||
     path.match("/h5p/delete/.*") ||
+    path === "/adminstart" ||
+    path === "/adminstart/" ||
     path === "/h5p/new" ||
     path === "/h5p/new/" ||
     path === "/h5p" ||

@@ -31,6 +31,11 @@ exports.routes = () => {
     }
   });
 
+  // Admin start page that shows a link to launch in a new window
+  router.get("/adminstart", async (req, res) => {
+    res.send("<p style='text-align:center;'><a href='/h5p/new' target='_blank'>Open editor in new window</a></p>")
+  });
+
   // Route for launching LTI authentication and creating the provider instance
   router.post("/launch_lti", ltiProvider.launch);
   return router;
