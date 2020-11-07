@@ -42,9 +42,9 @@ exports.model = session => model => `<!doctype html>
           KI Campus course, edit the "Additional parameters for this exercise" to contain this:</p>
           <code>exercise=${model.contentId}</code>`
           }
-          <p><a href="/h5p/edit/${
+          <p><a target="_blank" href="/h5p/edit/${
             model.contentId
-          }">Edit</a> | <a href="/h5p/">Create new H5P</a></p>
+          }">Edit</a> | <a target="_blank" href="/h5p/">Create new H5P</a></p>
           </div>`
           : ""
       }
