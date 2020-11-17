@@ -69,7 +69,7 @@ exports.launch = async (req, res) => {
           return res.redirect(`/h5p/play/${req.body.custom_exercise}`);
         }
         if (req.session.isTutor && !req.body.custom_exercise) {
-          return res.redirect("/adminstart");
+          return res.redirect("/h5p");
         }
         return res.redirect("/application");
       });

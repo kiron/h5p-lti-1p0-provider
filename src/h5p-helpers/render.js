@@ -32,7 +32,7 @@ exports.render = editor => {
                 }
                 <a class="btn btn-primary my-2" href="${
                   editor.config.baseUrl
-                }/new"><span class="fa fa-plus-circle m-2"></span>Create new content</a>
+                }/new" target="_blank"><span class="fa fa-plus-circle m-2"></span>Create new content</a>
                 ${
                   filteredContentObjects.length == 0
                     ? "<h4 style='margin:30px 0'>There's no H5P content for this course yet</h4>"
@@ -60,7 +60,7 @@ exports.render = editor => {
                                         </div>
                                     </div>
                                     <div class="p-2">                                        
-                                        <a class="btn btn-secondary" href="${editor.config.baseUrl}/edit/${content.id}">
+                                        <a class="btn btn-secondary" href="${editor.config.baseUrl}/edit/${content.id}" target="_blank">
                                             <span class="fa fa-pencil-alt m-1"></span>
                                             edit
                                         </a>
