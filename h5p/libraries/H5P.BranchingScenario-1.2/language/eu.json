@@ -1,0 +1,127 @@
+{
+  "semantics": [
+    {
+      "label": "Adarkatze Eskenatokien Editorea",
+      "fields": [
+        {
+          "label": "Titulua"
+        },
+        {
+          "label": "Hasierako pantaila",
+          "fields": [
+            {
+              "label": "Hasierako pantailaren titulua",
+              "placeholder": "Izenburua zure ikastaroarentzat"
+            },
+            {
+              "label": "Hasierako pantailaren azpititulua",
+              "placeholder": "Ikastaroaren xehetasunak"
+            },
+            {
+              "label": "Hasierako pantailaren irudia"
+            }
+          ]
+        },
+        {
+          "label": "Amaierako pantailen zerrenda",
+          "field": {
+            "label": "Amaierako pantaila",
+            "fields": [
+              {
+                "label": "Izenburua"
+              },
+              {
+                "label": "Testua"
+              },
+              {
+                "label": "Irudia"
+              },
+              {
+                "label": "Kalifikazioa",
+                "description": "Lehenetsitako eskenatokiaren amaierara heltzen diren erabiltzaileen kalifikazioa LMS, LRS edo H5Ptik kalifikazioak jasotzen dituen konektatuta dagoen beste edozein zerbitzura bidaliko da"
+              },
+              {
+                "label": "Edukiaren IDa"
+              }
+            ]
+          }
+        },
+        {
+          "label": "Aukerako erantzunen edukien zerrenda",
+          "entity": "edukia",
+          "field": {
+            "fields": [
+              {},
+              {
+                "label": "Erakutsi edukiaren izenburua ikuspegian",
+                "description": "Aukeratuz gero, erabiltzaileak edukiaren izenburua ikusiko du eduki honen gaineko barran"
+              },
+              {
+                "label": "Hurrengo Edukiaren IDa (amaierako pantailek zenbaki negatiboen bitartez identifikatzen dira)"
+              },
+              {
+                "label": "Feedbacka",
+                "fields": [
+                  {
+                    "label": "Feedbackaren izenburua"
+                  },
+                  {
+                    "label": "Feedbackaren testua"
+                  },
+                  {
+                    "label": "Feedbackaren irudia"
+                  },
+                  {
+                    "label": "Eskenatoki honen kalifikazioa",
+                    "description": "Eskenatoki honen amaierara heltzen diren erabiltzaileen kalifikazioa LMS, LRS edo H5Ptik kalifikazioak jasotzen dituen konektatuta dagoen beste edozein zerbitzura bidaliko da"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "label": "Kalifikazioaren aukerak",
+          "fields": [
+            {
+              "label": "Kalifikazioaren aukerak",
+              "description": "Aukeratu kalifikazio-mota",
+              "options": [
+                {
+                  "label": "Estatistikoki zehaztu eskenatoki bakoitzaren amaieraren kalifikazioa"
+                },
+                {
+                  "label": "Dinamikoki kalkulatu kalifikazioa erabiltzaileen erantzunen arabera"
+                },
+                {
+                  "label": "Kalifikaziorik ez"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Kokapena",
+          "fields": [
+            {
+              "label": "Hasiera-pantailako botoiaren testua",
+              "default": "Hasi ikastaroa"
+            },
+            {
+              "label": "Amaiera-pantailako botoiaren testua",
+              "default": "Berriz hasi ikastaroa"
+            },
+            {
+              "label": "Liburutegi-pantailetako botoi bakoitzarentzako testua",
+              "default": "Jarraitu"
+            },
+            {
+              "label": "Kalifikazioaren etiketa amaiera-pantailan",
+              "default": "Zure kalifikazioa:"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -3,7 +3,6 @@ node_modules/
 yarn.lock
 .env
 h5p/content
-h5p/libraries
 h5p/temporary-storage
 h5p/editor
 h5p/core
