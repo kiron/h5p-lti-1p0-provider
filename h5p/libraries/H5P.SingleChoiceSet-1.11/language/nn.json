@@ -12,7 +12,7 @@
         }
       ],
       "field": {
-        "label": "Spørsmål & alternativer",
+        "label": "Spørsmål &amp; alternativer",
         "fields": [
           {
             "label": "Spørsmål"

@@ -365,8 +365,9 @@ H5P.SingleChoiceSet.XApiEventBuilder = (function ($, EventDispatcher) {
    * @return {string}
    */
   var getContentXAPIId = function (contentId, subContentId) {
-    if (contentId && H5PIntegration && H5PIntegration.contents) {
-      var id =  H5PIntegration.contents['cid-' + contentId].url;
+    const cid = 'cid-' + contentId;
+    if (contentId && H5PIntegration && H5PIntegration.contents && H5PIntegration.contents[cid]) {
+      var id =  H5PIntegration.contents[cid].url;
 
       if (subContentId) {
         id += '?subContentId=' +  subContentId;

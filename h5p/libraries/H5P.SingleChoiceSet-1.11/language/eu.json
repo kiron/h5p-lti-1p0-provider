@@ -37,7 +37,7 @@
             }
           ],
           "label": "Definitu feedback pertsonalizatua edozein puntuazio tarterako",
-          "description": "Klikatu \"Gehitu tartea\" botoia gehitzeko behar haina tarte. Adibidez: 0-%20 Puntuazio txarra, &21-%90 Tarteko puntuazioa, %91-%100 Puntuazio bikaina!",
+          "description": "Klikatu \"Gehitu tartea\" botoia gehitzeko behar haina tarte. Adibidez: 0-%20 Puntuazio txarra, %21-%90 Tarteko puntuazioa, %91-%100 Puntuazio bikaina!",
           "entity": "tartea",
           "field": {
             "fields": [

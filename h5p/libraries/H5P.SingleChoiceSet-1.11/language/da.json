@@ -12,7 +12,7 @@
         }
       ],
       "field": {
-        "label": "Question & alternatives",
+        "label": "Question &amp; alternatives",
         "fields": [
           {
             "label": "Question"
