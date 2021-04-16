@@ -27,7 +27,7 @@
     "express-fileupload": "^1.1.7-alpha.3",
     "express-session": "^1.16.2",
     "fs-extra": "^9.0.1",
-    "h5p-nodejs-library": "^4.1.2",
+    "h5p-nodejs-library": ">=4.1.2",
     "helmet": "^3.23.3",
     "https": "^1.0.0",
     "i18next": "^19.5.1",
