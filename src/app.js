@@ -5,7 +5,9 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const helmet = require("helmet");
 const path = require("path");
-const H5P = require("h5p-nodejs-library");
+const H5P = require("@lumieducation/h5p-server");
+// const H5PHtmlExporter = require("@lumieducation/h5p-html-exporter");
+const H5PExpress = require("@lumieducation/h5p-express");
 const fileUpload = require("express-fileupload");
 const session = require("express-session");
 const i18next = require("i18next");
@@ -16,6 +18,9 @@ const redisInstance = require("./redis");
 const h5pInstance = require("./h5p-helpers/instance");
 const h5pRender = require("./h5p-helpers/render");
 const streaming = require("./streaming/middleware");
+
+const { h5pAjaxExpressRouter, libraryAdministrationExpressRouter, contentTypeCacheExpressRouter } =
+  H5PExpress;
 
 //initialize our app
 const app = express();
@@ -44,8 +49,8 @@ app.use(
     secret: process.env.SESSION_SECRET || "development",
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true, httpOnly: true, sameSite: "none" }
-  })
+    cookie: { secure: true, httpOnly: true, sameSite: "none" },
+  }),
 );
 
 // allow so that the server can access /.well-known
@@ -57,13 +62,14 @@ h5pInstance.getH5PStuff().then(({ h5pConfig, h5pEditor }) => {
     h5pEditor.libraryStorage,
     h5pEditor.contentStorage,
     h5pConfig,
-    null,
-    ["/assets/js/xapi-send.js"]
+    undefined,
+    undefined,
+    { customization: { global: { scrips: ["/assets/js/xapi-send.js"] } } },
   );
   app.use(
     fileUpload({
-      limits: { fileSize: h5pEditor.config.maxFileSize }
-    })
+      limits: { fileSize: h5pEditor.config.maxFileSize },
+    }),
   );
 
   app.use(i18nextHttpMiddleware.handle(i18next));
@@ -74,34 +80,42 @@ h5pInstance.getH5PStuff().then(({ h5pConfig, h5pEditor }) => {
   // object, which means we get all of them.
   app.use(
     h5pEditor.config.baseUrl,
-    H5P.adapters.express(
+    h5pAjaxExpressRouter(
       h5pEditor,
       path.resolve("h5p/core"),
       path.resolve("h5p/editor"),
       undefined,
-      "auto"
-    )
+      "auto",
+    ),
   );
 
   // The expressRoutes are routes that create pages for these actions:
-  app.use(
-    h5pEditor.config.baseUrl,
-    router.h5pRoutes(h5pEditor, h5pPlayer, "auto")
-  );
+  app.use(h5pEditor.config.baseUrl, router.h5pRoutes(h5pEditor, h5pPlayer, "auto"));
 
   // The LibraryAdministrationExpress routes are REST endpoints that offer library
   // management functionality.
-  app.use(
-      `${h5pEditor.config.baseUrl}/libraries`,
-      H5P.adapters.LibraryAdministrationExpressRouter(h5pEditor)
-  );
+  app.use(`${h5pEditor.config.baseUrl}/libraries`, libraryAdministrationExpressRouter(h5pEditor));
 
   // The ContentTypeCacheExpress routes are REST endpoints that allow updating
   // the content type cache manually.
   app.use(
-      `${h5pEditor.config.baseUrl}/content-type-cache`,
-      H5P.adapters.ContentTypeCacheExpressRouter(h5pEditor.contentTypeCache)
+    `${h5pEditor.config.baseUrl}/content-type-cache`,
+    contentTypeCacheExpressRouter(h5pEditor.contentTypeCache),
   );
+
+  // const htmlExporter = new H5PHtmlExporter(
+  //   h5pEditor.libraryStorage,
+  //   h5pEditor.contentStorage,
+  //   h5pEditor.config,
+  //   path.join(__dirname, "../h5p/core"),
+  //   path.join(__dirname, "../h5p/editor"),
+  // );
+
+  // server.get("/h5p/html/:contentId", async (req, res) => {
+  //   const html = await htmlExporter.createSingleBundle(req.params.contentId, req.user);
+  //   res.setHeader("Content-disposition", `attachment; filename=${req.params.contentId}.html`);
+  //   res.status(200).send(html);
+  // });
 
   app.get("/h5p", h5pRender.render(h5pEditor));
 });

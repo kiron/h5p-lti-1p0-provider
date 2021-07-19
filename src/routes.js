@@ -20,11 +20,10 @@ exports.routes = () => {
         ltiConsumer: req.session.ltiConsumer,
         userId: req.session.userId,
         isTutor: req.session.isTutor,
-        context_id: req.session.context_id
+        context_id: req.session.context_id,
       });
     } else {
-      const error =
-        "Session invalid. Please login via LTI to use this application.";
+      const error = "Session invalid. Please login via LTI to use this application.";
       console.log(error);
       res.status(403).send(error);
       return;
@@ -33,7 +32,9 @@ exports.routes = () => {
 
   // Admin start page that shows a link to launch in a new window
   router.get("/adminstart", async (req, res) => {
-    res.send("<p style='text-align:center;'><a href='/h5p/new' target='_blank'>Open editor in new window</a></p>")
+    res.send(
+      "<p style='text-align:center;'><a href='/h5p/new' target='_blank'>Open editor in new window</a></p>",
+    );
   });
 
   // Route for launching LTI authentication and creating the provider instance
@@ -48,7 +49,7 @@ exports.h5pRoutes = (h5pEditor, h5pPlayer, languageOverride) => {
     try {
       const h5pPage = await h5pPlayer
         .setRenderer(player.model(req.session))
-        .render(req.params.contentId);
+        .render(req.params.contentId, req.user);
       res.send(h5pPage);
       res.status(200).end();
     } catch (error) {
@@ -59,11 +60,11 @@ exports.h5pRoutes = (h5pEditor, h5pPlayer, languageOverride) => {
   router.get("/edit/:contentId", async (req, res) => {
     const metadata = await h5pEditor.contentManager.getContentMetadata(
       req.params.contentId,
-      req.user
+      req.user,
     );
     if (metadata.lti_context_id !== req.session.context_id) {
       res.send(
-        `Sorry! You don't have permission to edit this content<br/><a href="javascript:window.location=document.referrer">Go Back</a>`
+        `Sorry! You don't have permission to edit this content<br/><a href="javascript:window.location=document.referrer">Go Back</a>`,
       );
       res.status(500).end();
       return;
@@ -72,7 +73,8 @@ exports.h5pRoutes = (h5pEditor, h5pPlayer, languageOverride) => {
       .setRenderer(editor.model)
       .render(
         req.params.contentId,
-        languageOverride === "auto" ? req.language ?? "en" : languageOverride
+        languageOverride === "auto" ? req.language ?? "en" : languageOverride,
+        req.user,
       );
     res.send(page);
     res.status(200).end();
@@ -89,7 +91,7 @@ exports.h5pRoutes = (h5pEditor, h5pPlayer, languageOverride) => {
       req.body.params.params,
       metadata,
       req.body.library,
-      req.user
+      req.user,
     );
 
     res.send(JSON.stringify({ contentId }));
@@ -101,7 +103,8 @@ exports.h5pRoutes = (h5pEditor, h5pPlayer, languageOverride) => {
       .setRenderer(editor.model)
       .render(
         undefined,
-        languageOverride === "auto" ? req.language ?? "en" : languageOverride
+        languageOverride === "auto" ? req.language ?? "en" : languageOverride,
+        req.user,
       );
     res.send(page);
     res.status(200).end();
@@ -130,7 +133,7 @@ exports.h5pRoutes = (h5pEditor, h5pPlayer, languageOverride) => {
       req.body.params.params,
       metadata,
       req.body.library,
-      req.user
+      req.user,
     );
 
     res.send(JSON.stringify({ contentId }));
@@ -141,11 +144,11 @@ exports.h5pRoutes = (h5pEditor, h5pPlayer, languageOverride) => {
     try {
       const metadata = await h5pEditor.contentManager.getContentMetadata(
         req.params.contentId,
-        req.user
+        req.user,
       );
       if (metadata.lti_context_id !== req.session.context_id) {
         res.send(
-          `Sorry! You don't have permission to delete this content<br/><a href="javascript:window.location=document.referrer">Go Back</a>`
+          `Sorry! You don't have permission to delete this content<br/><a href="javascript:window.location=document.referrer">Go Back</a>`,
         );
         res.status(500).end();
         return;
@@ -153,14 +156,14 @@ exports.h5pRoutes = (h5pEditor, h5pPlayer, languageOverride) => {
       await h5pEditor.deleteContent(req.params.contentId, req.user);
     } catch (error) {
       res.send(
-        `Error deleting content with id ${req.params.contentId}: ${error.message}<br/><a href="javascript:window.location=document.referrer">Go Back</a>`
+        `Error deleting content with id ${req.params.contentId}: ${error.message}<br/><a href="javascript:window.location=document.referrer">Go Back</a>`,
       );
       res.status(500).end();
       return;
     }
 
     res.send(
-      `Content ${req.params.contentId} successfully deleted.<br/><a href="javascript:window.location=document.referrer">Go Back</a>`
+      `Content ${req.params.contentId} successfully deleted.<br/><a href="javascript:window.location=document.referrer">Go Back</a>`,
     );
     res.status(200).end();
   });
