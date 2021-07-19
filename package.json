@@ -11,7 +11,7 @@
     "download:h5p": "sh scripts/install.sh"
   },
   "engines": {
-    "node": "^14.4.0",
+    "node": ">=15.0.0",
     "yarn": "1.x"
   },
   "author": "Dom Starkey",
@@ -52,5 +52,8 @@
     "coveragePathIgnorePatterns": [
       "/node_modules/"
     ]
+  },
+  "volta": {
+    "node": "16.5.0"
   }
 }

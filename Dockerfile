@@ -1,5 +1,5 @@
 # Dockerfile
-FROM node:14
+FROM node:16
 # 14 LTS
 
 RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
@@ -16,4 +16,4 @@ RUN mkdir /home/node/certs
 
 CMD ["sh", "-c", "yarn && yarn start"]
 
-EXPOSE 80
+EXPOSE 8080
