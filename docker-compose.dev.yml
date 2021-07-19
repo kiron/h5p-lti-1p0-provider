@@ -1,0 +1,100 @@
+version: '3.1'
+services:
+  app:
+    depends_on:
+    - mongo
+    - minio
+    - minio_init
+    - redis
+    build: './'
+    container_name: h5p-lti-1p0-provider
+    working_dir: /home/node/app
+    ports:
+      - '8080:8080'
+    volumes:
+      - ./h5p:/home/node/app/h5p
+      - ./src:/home/node/app/src
+    environment:
+      NODE_ENV: development
+      SESSION_SECRET: sessionsecret
+      PORT: 8080
+      OAUTH_CONSUMER_KEY: oauthconsumerkey
+      OAUTH_SECRET: oauthsecret
+      REDIS_URL: redis://redis:6379
+      DOMAIN: localhost
+      TEMPORARYSTORAGE: s3            
+      CONTENTSTORAGE: mongos3
+      AWS_ACCESS_KEY_ID: 'AKIAIOSFODNN7EXAMPLE'
+      AWS_SECRET_ACCESS_KEY: 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'
+      AWS_S3_ENDPOINT: http://minio:9000
+      AWS_S3_MAX_FILE_LENGTH: 100
+      CONTENT_AWS_S3_BUCKET: testbucket1
+      TEMPORARY_AWS_S3_BUCKET: tempbucket1
+      MONGODB_URL: mongodb://mongo:27017
+      MONGODB_DB: testdb1
+      MONGODB_USER: root
+      MONGODB_PASSWORD: example
+      CONTENT_MONGO_COLLECTION: h5p
+      CACHE: redis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_DB: 0
+      LIBRARYSTORAGE: mongos3
+      LIBRARY_MONGO_COLLECTION: h5plibraries
+      LIBRARY_AWS_S3_BUCKET: libbucket1
+
+    command: sh -c "yarn && yarn download && yarn start"
+
+    command: sh -c "yarn && yarn download && yarn start"
+
+  redis:
+    image: 'redis:alpine'
+    container_name: redis
+    command: 'redis-server --appendonly yes'
+    volumes:
+      - redis_data:/data
+
+  # Creates buckets for S3
+  minio_init:
+      image: minio/mc
+      depends_on:
+          - minio
+      entrypoint: >
+          /bin/sh -c "
+          /usr/bin/mc config host add h5pminio http://minio:9000 minioaccesskey miniosecret --api S3v4;
+          /usr/bin/mc mb h5pminio/testbucket1;
+          /usr/bin/mc mb h5pminio/tempbucket1;
+          /usr/bin/mc mb h5pminio/libbucket1;
+          exit 0;
+          "    
+
+  mongo:
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+          - mongodb_data:/data/db
+
+  minio:
+    image: minio/minio
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+      - '33515:33515'
+    container_name: minio
+    volumes:
+      - minio_data:/data
+    command: ['server', '/data']  
+    environment:
+      MINIO_ROOT_USER: 'AKIAIOSFODNN7EXAMPLE'
+      MINIO_ROOT_PASSWORD: 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY'
+      MINIO_ACCESS_KEY: minioaccesskey
+      MINIO_SECRET_KEY: miniosecret
+    
+volumes:
+    mongodb_data:
+    minio_data:
+    redis_data:
+    h5p_data:
