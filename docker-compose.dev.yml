@@ -42,6 +42,8 @@ services:
       LIBRARYSTORAGE: mongos3
       LIBRARY_MONGO_COLLECTION: h5plibraries
       LIBRARY_AWS_S3_BUCKET: libbucket1
+      DEBUG: h5p:*
+      LOG_LEVEL: debug
 
     command: sh -c "yarn && yarn download && yarn start"
 
