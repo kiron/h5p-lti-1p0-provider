@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node src/server",
+    "start:dev": "nodemon src/server",
     "download": "yarn download:content-type-cache && yarn download:h5p",
     "test": "jest",
     "download:content-type-cache": "node scripts/update-real-content-type-cache.js",
@@ -17,6 +18,10 @@
   "author": "Dom Starkey",
   "license": "MIT",
   "dependencies": {
+    "@lumieducation/h5p-express": "^8.1.2",
+    "@lumieducation/h5p-html-exporter": "^8.1.2",
+    "@lumieducation/h5p-mongos3": "^8.1.2",
+    "@lumieducation/h5p-server": "^8.1.2",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "cache-manager": "3.4.4",
@@ -28,10 +33,6 @@
     "express-fileupload": "^1.2.1",
     "express-session": "^1.16.2",
     "fs-extra": "^9.0.1",
-    "@lumieducation/h5p-express": "^8.1.2",
-    "@lumieducation/h5p-html-exporter": "^8.1.2",
-    "@lumieducation/h5p-mongos3": "^8.1.2",
-    "@lumieducation/h5p-server": "^8.1.2",
     "helmet": "^3.23.3",
     "https": "^1.0.0",
     "i18next": "^19.5.1",
@@ -48,6 +49,7 @@
   },
   "devDependencies": {
     "jest": "^26.1.0",
+    "nodemon": "^2.0.12",
     "supertest": "^4.0.2"
   },
   "jest": {
