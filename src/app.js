@@ -67,7 +67,7 @@ h5pInstance.getH5PStuff().then(({ h5pConfig, h5pEditor }) => {
     h5pConfig,
     undefined,
     undefined,
-    { customization: { global: { scrips: ["/assets/js/xapi-send.js"] } } }
+    { customization: { global: { scripts: ["/assets/js/xapi-send.js"] } } }
   );
   app.use(
     fileUpload({
