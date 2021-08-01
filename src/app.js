@@ -19,8 +19,11 @@ const h5pInstance = require("./h5p-helpers/instance");
 const h5pRender = require("./h5p-helpers/render");
 const streaming = require("./streaming/middleware");
 
-const { h5pAjaxExpressRouter, libraryAdministrationExpressRouter, contentTypeCacheExpressRouter } =
-  H5PExpress;
+const {
+  h5pAjaxExpressRouter,
+  libraryAdministrationExpressRouter,
+  contentTypeCacheExpressRouter,
+} = H5PExpress;
 
 //initialize our app
 const app = express();
@@ -50,7 +53,7 @@ app.use(
     resave: false,
     saveUninitialized: true,
     cookie: { secure: true, httpOnly: true, sameSite: "none" },
-  }),
+  })
 );
 
 // allow so that the server can access /.well-known
@@ -64,12 +67,12 @@ h5pInstance.getH5PStuff().then(({ h5pConfig, h5pEditor }) => {
     h5pConfig,
     undefined,
     undefined,
-    { customization: { global: { scrips: ["/assets/js/xapi-send.js"] } } },
+    { customization: { global: { scrips: ["/assets/js/xapi-send.js"] } } }
   );
   app.use(
     fileUpload({
       limits: { fileSize: h5pEditor.config.maxFileSize },
-    }),
+    })
   );
 
   app.use(i18nextHttpMiddleware.handle(i18next));
@@ -85,22 +88,28 @@ h5pInstance.getH5PStuff().then(({ h5pConfig, h5pEditor }) => {
       path.resolve("h5p/core"),
       path.resolve("h5p/editor"),
       undefined,
-      "auto",
-    ),
+      "auto"
+    )
   );
 
   // The expressRoutes are routes that create pages for these actions:
-  app.use(h5pEditor.config.baseUrl, router.h5pRoutes(h5pEditor, h5pPlayer, "auto"));
+  app.use(
+    h5pEditor.config.baseUrl,
+    router.h5pRoutes(h5pEditor, h5pPlayer, "auto")
+  );
 
   // The LibraryAdministrationExpress routes are REST endpoints that offer library
   // management functionality.
-  app.use(`${h5pEditor.config.baseUrl}/libraries`, libraryAdministrationExpressRouter(h5pEditor));
+  app.use(
+    `${h5pEditor.config.baseUrl}/libraries`,
+    libraryAdministrationExpressRouter(h5pEditor)
+  );
 
   // The ContentTypeCacheExpress routes are REST endpoints that allow updating
   // the content type cache manually.
   app.use(
     `${h5pEditor.config.baseUrl}/content-type-cache`,
-    contentTypeCacheExpressRouter(h5pEditor.contentTypeCache),
+    contentTypeCacheExpressRouter(h5pEditor.contentTypeCache)
   );
 
   // const htmlExporter = new H5PHtmlExporter(

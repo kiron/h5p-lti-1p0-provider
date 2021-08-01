@@ -15,6 +15,13 @@
     "node": ">=15.0.0",
     "yarn": "1.x"
   },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "singleQuote": false,
+    "arrowParens": "avoid",
+    "printWidth": 80
+  },
   "author": "Dom Starkey",
   "license": "MIT",
   "dependencies": {
