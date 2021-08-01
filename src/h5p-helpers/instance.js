@@ -24,7 +24,7 @@ const createH5PEditor = async (
   localLibraryPath,
   localContentPath,
   localTemporaryPath,
-  translationCallback,
+  translationCallback
 ) => {
   let cache;
   if (process.env.CACHE === "in-memory") {
@@ -49,7 +49,9 @@ const createH5PEditor = async (
   let libraryStorage;
   if (process.env.LIBRARYSTORAGE === "mongo") {
     const mongoLibraryStorage = new dbImplementations.MongoLibraryStorage(
-      (await dbImplementations.initMongo()).collection(process.env.LIBRARY_MONGO_COLLECTION),
+      (await dbImplementations.initMongo()).collection(
+        process.env.LIBRARY_MONGO_COLLECTION
+      )
     );
     await mongoLibraryStorage.createIndexes();
     libraryStorage = mongoLibraryStorage;
@@ -59,18 +61,22 @@ const createH5PEditor = async (
         s3ForcePathStyle: true,
         signatureVersion: "v4",
       }),
-      (await dbImplementations.initMongo()).collection(process.env.LIBRARY_MONGO_COLLECTION),
+      (await dbImplementations.initMongo()).collection(
+        process.env.LIBRARY_MONGO_COLLECTION
+      ),
       {
         s3Bucket: process.env.LIBRARY_AWS_S3_BUCKET,
         maxKeyLength: process.env.AWS_S3_MAX_FILE_LENGTH
           ? Number.parseInt(process.env.AWS_S3_MAX_FILE_LENGTH, 10)
           : undefined,
-      },
+      }
     );
     await mongoS3LibraryStorage.createIndexes();
     libraryStorage = mongoS3LibraryStorage;
   } else {
-    libraryStorage = new H5P.fsImplementations.FileLibraryStorage(localLibraryPath);
+    libraryStorage = new H5P.fsImplementations.FileLibraryStorage(
+      localLibraryPath
+    );
   }
 
   const h5pEditor = new H5P.H5PEditor(
@@ -86,7 +92,9 @@ const createH5PEditor = async (
             s3ForcePathStyle: true,
             signatureVersion: "v4",
           }),
-          (await dbImplementations.initMongo()).collection(process.env.CONTENT_MONGO_COLLECTION),
+          (await dbImplementations.initMongo()).collection(
+            process.env.CONTENT_MONGO_COLLECTION
+          ),
           {
             s3Bucket: process.env.CONTENT_AWS_S3_BUCKET,
             maxKeyLength: process.env.AWS_S3_MAX_FILE_LENGTH
@@ -98,7 +106,7 @@ const createH5PEditor = async (
               }
               return learnerPermissions;
             },
-          },
+          }
         ),
     process.env.TEMPORARYSTORAGE === "s3"
       ? new dbImplementations.S3TemporaryFileStorage(
@@ -111,20 +119,27 @@ const createH5PEditor = async (
             maxKeyLength: process.env.AWS_S3_MAX_FILE_LENGTH
               ? Number.parseInt(process.env.AWS_S3_MAX_FILE_LENGTH, 10)
               : undefined,
-          },
+          }
         )
-      : new H5P.fsImplementations.DirectoryTemporaryFileStorage(localTemporaryPath),
+      : new H5P.fsImplementations.DirectoryTemporaryFileStorage(
+          localTemporaryPath
+        ),
     translationCallback,
     undefined,
     {
       enableHubLocalization: true,
       enableLibraryNameLocalization: true,
-    },
+    }
   );
   // Set bucket lifecycle configuration for S3 temporary storage to make
   // sure temporary files expire.
-  if (h5pEditor.temporaryStorage instanceof dbImplementations.S3TemporaryFileStorage) {
-    await h5pEditor.temporaryStorage.setBucketLifecycleConfiguration(h5pEditor.config);
+  if (
+    h5pEditor.temporaryStorage instanceof
+    dbImplementations.S3TemporaryFileStorage
+  ) {
+    await h5pEditor.temporaryStorage.setBucketLifecycleConfiguration(
+      h5pEditor.config
+    );
   }
 
   return h5pEditor;
@@ -155,7 +170,7 @@ exports.getH5PStuff = async () => {
 
   const h5pConfig = await new H5P.H5PConfig(
     new H5P.fsImplementations.JsonStorage(path.resolve("h5p-config.json")),
-    { maxFileSize: 200000000 },
+    { maxFileSize: 200000000 }
   ).load();
 
   const h5pEditor = await createH5PEditor(
@@ -165,7 +180,7 @@ exports.getH5PStuff = async () => {
     path.resolve("h5p/temporary-storage"), // the path on the local disc where temporary files (uploads) should be stored. Only used / necessary if you use the local filesystem temporary storage class.
     (key, language) => {
       return translationFunction(key, { lng: language });
-    },
+    }
   );
   return { h5pConfig, h5pEditor };
 };
