@@ -93,7 +93,7 @@ const createH5PEditor = async (
               ? Number.parseInt(process.env.AWS_S3_MAX_FILE_LENGTH, 10)
               : undefined,
             getPermissions: (contentId, user) => {
-              if (user.isTutor) {
+              if (user && user.isTutor) {
                 return tutorPermissions;
               }
               return learnerPermissions;
