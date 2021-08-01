@@ -1,6 +1,7 @@
 const session = require("express-session");
 
-exports.model = session => model => `<!doctype html>
+exports.model = session => model =>
+  `<!doctype html>
 <html class="h5p-iframe">
 <head>
     <meta charset="utf-8">
@@ -17,7 +18,7 @@ exports.model = session => model => `<!doctype html>
       session.resource_link_title || session.context_title || "H5P Exercise"
     }</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    ${model.customScripts}
+    ${model.customScripts ? model.customScripts : ""}
     ${
       session.custom_style_url
         ? `<link rel="stylesheet" href="${session.custom_style_url}" />`
