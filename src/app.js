@@ -6,7 +6,6 @@ const express = require("express");
 const helmet = require("helmet");
 const path = require("path");
 const H5P = require("@lumieducation/h5p-server");
-// const H5PHtmlExporter = require("@lumieducation/h5p-html-exporter");
 const H5PExpress = require("@lumieducation/h5p-express");
 const fileUpload = require("express-fileupload");
 const session = require("express-session");
@@ -110,21 +109,7 @@ h5pInstance.getH5PStuff().then(({ h5pConfig, h5pEditor }) => {
   app.use(
     `${h5pEditor.config.baseUrl}/content-type-cache`,
     contentTypeCacheExpressRouter(h5pEditor.contentTypeCache)
-  );
-
-  // const htmlExporter = new H5PHtmlExporter(
-  //   h5pEditor.libraryStorage,
-  //   h5pEditor.contentStorage,
-  //   h5pEditor.config,
-  //   path.join(__dirname, "../h5p/core"),
-  //   path.join(__dirname, "../h5p/editor"),
-  // );
-
-  // server.get("/h5p/html/:contentId", async (req, res) => {
-  //   const html = await htmlExporter.createSingleBundle(req.params.contentId, req.user);
-  //   res.setHeader("Content-disposition", `attachment; filename=${req.params.contentId}.html`);
-  //   res.status(200).send(html);
-  // });
+  );  
 
   app.get("/h5p", h5pRender.render(h5pEditor));
 });
