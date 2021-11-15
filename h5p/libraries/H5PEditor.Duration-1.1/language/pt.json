@@ -1,7 +1,0 @@
-{
-  "libraryStrings": {
-    "exceedsMin": "\":property\" excede o valor mínimo de :min.",
-    "fromBiggerThanTo": "\"Desde\" deve ser anterior a \"To\".",
-    "invalidTime": "\":property\" contém um formato de hora inválido."
-  }
-}
